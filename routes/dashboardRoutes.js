@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+const {fetchSummary,fetchCategoryWiseTotals,fetchMonthlyTrends,fetchRecentTransactions} = require("../controllers/dashboardController");
+const { protect } = require("../middlewares/auth");
+const { authorize } = require("../middlewares/roleCheck");
+router.use(protect);
+router.get("/recent", fetchRecentTransactions);
+router.get("/summary", authorize("admin", "analyst"), fetchSummary);
+router.get("/by-category", authorize("admin", "analyst"), fetchCategoryWiseTotals);
+router.get("/trends", authorize("admin", "analyst"), fetchMonthlyTrends);
+module.exports = router;

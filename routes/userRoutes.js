@@ -1,0 +1,12 @@
+const express = require("express");
+const router = express.Router();
+const {fetchAllUsers,fetchUserById,updateUserById,deleteUserById} = require("../controllers/userController");
+const { protect } = require("../middlewares/auth");
+const { authorize } = require("../middlewares/roleCheck");
+router.use(protect);
+router.use(authorize("admin"));
+router.get("/", fetchAllUsers);
+router.get("/:id", fetchUserById);
+router.patch("/:id", updateUserById);
+router.delete("/:id", deleteUserById);
+module.exports = router;

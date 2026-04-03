@@ -1,0 +1,13 @@
+const express = require("express");
+const router = express.Router();
+const {fetchAllTransactions,fetchTransactionById,addTransaction,editTransaction,removeTransaction} = require("../controllers/transactionController");
+const { protect } = require("../middlewares/auth");
+const { authorize } = require("../middlewares/roleCheck");
+const {createTransactionValidation,updateTransactionValidation,filterTransactionValidation} = require("../validations/transactionValidation");
+router.use(protect);
+router.get("/", filterTransactionValidation, fetchAllTransactions);
+router.get("/:id", fetchTransactionById);
+router.post("/", authorize("admin", "analyst"), createTransactionValidation, addTransaction);
+router.put("/:id", authorize("admin", "analyst"), updateTransactionValidation, editTransaction);
+router.delete("/:id", authorize("admin"), removeTransaction);
+module.exports = router;
